@@ -9,7 +9,9 @@ export default function SignupScreen() {
   const [emailId, setEmailId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
   const emailData = [
     { label: 'gmail.com', value: 'gmail.com' },
@@ -35,15 +37,32 @@ export default function SignupScreen() {
   ];
 
   const handleSignUp = async () => {
+    let isValid = true
+    setConfirmPasswordError('')
+    setEmailError('')
     if (!emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
       Alert.alert('모든 항목을 입력해 주세요!', 'Please enter all items!');
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('비밀번호가 일치하지 않습니다.', 'Passwords do not match.');
-      return;
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다 Password does not match');
+      isValid = false
     }
+
+    const regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+    if (!regEmail.test(`${emailId}@${selectedEmail}`)) {
+      setEmailError('올바른 이메일 형식이 아닙니다 The email format is not valid');
+      isValid = false;
+    }
+
+    const regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
+    if (!regPassword.test(password)) {
+      setPasswordError('비밀번호는 영문, 숫자, 특수문자 포함 8자 이상이어야 합니다\nPassword must be 8+ characters with letters, numbers, and symbols');
+      isValid = false;
+    }
+
+    if (isValid) return;
 
     const fullEmail = `${emailId}@${selectedEmail}`;
 
@@ -70,7 +89,13 @@ export default function SignupScreen() {
 
         <Text style={styles.label}>이메일주소</Text>
         <View style={styles.row}>
-          <TextInput style={[styles.input, { flex: 1 }]} value={emailId} onChangeText={setEmailId}/>
+          <TextInput 
+            style={[styles.input, { flex: 1 }]} 
+            value={emailId} 
+            onChangeText={(text) => {
+              setEmailId(text);
+              setEmailError(''); 
+            }}/>
           <Text style={styles.symbol}>@</Text>
           <Dropdown
             style={[styles.dropdown, { flex: 2 }]}
@@ -82,12 +107,39 @@ export default function SignupScreen() {
             onChange={(item) => setSelectedEmail(item.value)}
           />
         </View>
+        <View style={{marginTop: -12}}>
+          {emailError ? (
+            <Text style={styles.errorText}>{emailError}</Text>
+            ) : null}
+        </View>
+        
 
         <Text style={styles.label}>비밀번호</Text>
-        <TextInput style={styles.input} secureTextEntry value={password} onChangeText={setPassword}/>
+        <TextInput 
+          style={styles.input} 
+          secureTextEntry value={password} 
+          onChangeText={(text) => {
+          setPassword(text);
+          setPasswordError('');
+        }}/>
+        {passwordError ? (
+          <Text style={styles.errorText}>{passwordError}</Text>
+        ) : null}
 
         <Text style={styles.label}>비밀번호 확인</Text>
-        <TextInput style={styles.input} secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword}/>
+        <TextInput
+          style={styles.input}
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
+            setConfirmPasswordError('');
+          }}
+        />
+        {confirmPasswordError ? (
+          <Text style={styles.errorText}>{confirmPasswordError}</Text>
+        ) : null}
+
 
         <Text style={styles.label}>국적</Text>
         <Dropdown
@@ -152,6 +204,12 @@ const styles = StyleSheet.create({
     height: 48,
     lineHeight: 48,
   },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+    marginTop: -5,
+    fontSize: 13,
+  },  
   dropdown: {
     borderWidth: 1,
     borderColor: '#BDBDBD',
