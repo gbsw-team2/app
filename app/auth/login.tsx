@@ -10,6 +10,6 @@ export default function loginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-
+    backgroundColor: '#fff',
   }
 })
