@@ -84,7 +84,7 @@ const SignupScreen: FC = () => {
     try {
       const response = await axios.post('http://백엔드/api/users', requestBody);
       Alert.alert('회원가입 성공', 'sign up successful');
-      router.push('/auth/login')
+      //로그인 화면 이동 
     } catch (error) {
       console.error(error);
       Alert.alert('회원가입 실패', 'sign up failed');      
@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
     borderColor: '#BDBDBD',
     paddingHorizontal: 10,
     borderRadius: 5,
-    backgroundColor: '#fff',
     marginBottom: 10,
   },
   row: {
