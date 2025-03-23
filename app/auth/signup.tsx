@@ -61,7 +61,7 @@ const SignupScreen: FC = () => {
 
     const regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
     if (!regEmail.test(`${emailId}@${selectedEmail}`)) {
-      setEmailError('올바른 이메일 형식이 아닙니다 The email format is not valid');
+      setEmailError('올바른 이메일 형식이 아닙니다 \nThe email format is not valid');
       isValid = false;
     }
 
@@ -121,7 +121,14 @@ const SignupScreen: FC = () => {
             <Text style={styles.errorText}>{emailError}</Text>
             ) : null}
         </View>
-        <TextInput />
+        <View style={styles.row}>
+          <TextInput 
+            style={[styles.input, {flex: 1, marginRight:16}]}
+          />
+          <TouchableOpacity style={[styles.sendButton]}>
+            <Text style={[styles.buttonText]}>인증번호 발송</Text>
+          </TouchableOpacity>
+        </View>
         
         <Text style={styles.label}>비밀번호</Text>
         <TextInput 
@@ -226,7 +233,7 @@ const styles = StyleSheet.create({
     height: 48,
     justifyContent: 'center',
     backgroundColor: '#fff',
-    marginBottom: 10, 
+    marginBottom: 10,  
   },  
   button: {
     backgroundColor: '#3E7BC9',
@@ -235,6 +242,17 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 12,
+  },
+  sendButton: {
+    backgroundColor: '#3E7BC9',
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    flexShrink: 0,
+    marginTop: -8,
   },
   buttonText: {
     color: '#fff',
