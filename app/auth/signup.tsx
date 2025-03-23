@@ -45,6 +45,12 @@ const SignupScreen: FC = () => {
   const [emailError, setEmailError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
+  const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
+
+  const handleSendCode = () => {
+    setIsCodeSent(true);
+  }
+
   const handleSignUp = async (): Promise<void> => {
     let isValid = true
     setConfirmPasswordError('')
@@ -125,8 +131,8 @@ const SignupScreen: FC = () => {
           <TextInput 
             style={[styles.input, {flex: 1, marginRight:16}]}
           />
-          <TouchableOpacity style={[styles.sendButton]}>
-            <Text style={[styles.buttonText]}>인증번호 발송</Text>
+          <TouchableOpacity style={[styles.sendButton]} onPress={handleSendCode}>
+            <Text style={[styles.buttonText]}>{isCodeSent ? '인증' : '인증번호 발송'}</Text>
           </TouchableOpacity>
         </View>
         
