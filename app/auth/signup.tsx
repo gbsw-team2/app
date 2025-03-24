@@ -1,42 +1,51 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from "react-native";
 import { useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
+import { useRouter } from 'expo-router';
 import axios from 'axios';
+import type { FC } from 'react';
 
-export default function SignupScreen() {
-  const [selectedEmail, setSelectedEmail] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [emailId, setEmailId] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+interface DropdownItem {
+  label: string;
+  value: string;
+}
 
-  const emailData = [
-    { label: 'gmail.com', value: 'gmail.com' },
-    { label: 'naver.com', value: 'naver.com' },
-    { label: 'icloud.com', value: 'icloud.com' },
-    { label: 'kakao.com', value: 'kakao.com' },
-    { label: 'daum.net', value: 'daum.net' },
-    { label: 'hanmail.net', value: 'hanmail.net' },
-  ];
+const emailData: DropdownItem[] = [
+  { label: 'gmail.com', value: 'gmail.com' },
+  { label: 'naver.com', value: 'naver.com' },
+  { label: 'icloud.com', value: 'icloud.com' },
+  { label: 'kakao.com', value: 'kakao.com' },
+  { label: 'daum.net', value: 'daum.net' },
+  { label: 'hanmail.net', value: 'hanmail.net' },
+];
 
-  const countryData = [
-    { label: '미국', value: '미국' },
-    { label: '중국', value: '중국' },
-    { label: '일본', value: '일본' },
-    { label: '캐나다', value: '캐나다' },
-    { label: '베트남', value: '베트남' },
-    { label: '필리핀', value: '필리핀' },
-    { label: '캄보디아', value: '캄보디아' },
-    { label: '우즈베키스탄', value: '우즈베키스탄' },
-    { label: '호주', value: '호주' },
-    { label: '러시아', value: '러시아' },
-    { label: '가나', value: '가나' },
-  ];
+//임시
+const countryData: DropdownItem[] = [
+  { label: '미국', value: '1' },
+  { label: '중국', value: '2' },
+  { label: '일본', value: '3' },
+  { label: '캐나다', value: '4' },
+  { label: '베트남', value: '5' },
+  { label: '필리핀', value: '6' },
+  { label: '캄보디아', value: '7' },
+  { label: '우즈베키스탄', value: '8' },
+  { label: '호주', value: '9' },
+  { label: '러시아', value: '10' },
+  { label: '가나', value: '11' },
+];
 
-  const handleSignUp = async () => {
+const SignupScreen: FC = () => {
+  const router = useRouter();
+
+  const [selectedEmail, setSelectedEmail] = useState<string>('');
+  const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const [emailId, setEmailId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [emailError, setEmailError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
+  const handleSignUp = async (): Promise<void> => {
     let isValid = true
     setConfirmPasswordError('')
     setEmailError('')
@@ -62,7 +71,7 @@ export default function SignupScreen() {
       isValid = false;
     }
 
-    if (isValid) return;
+    if (!isValid) return;
 
     const fullEmail = `${emailId}@${selectedEmail}`;
 
@@ -75,7 +84,7 @@ export default function SignupScreen() {
     try {
       const response = await axios.post('http://백엔드/api/users', requestBody);
       Alert.alert('회원가입 성공', 'sign up successful');
-      // 로그인 화면 이동 코드 작성
+      //로그인 화면 이동 
     } catch (error) {
       console.error(error);
       Alert.alert('회원가입 실패', 'sign up failed');      
@@ -104,7 +113,7 @@ export default function SignupScreen() {
             valueField="value"
             placeholder="이메일을 선택해주세요"
             value={selectedEmail}
-            onChange={(item) => setSelectedEmail(item.value)}
+            onChange={(item: DropdownItem) => setSelectedEmail(item.value)}
           />
         </View>
         <View style={{marginTop: -12}}>
@@ -112,8 +121,8 @@ export default function SignupScreen() {
             <Text style={styles.errorText}>{emailError}</Text>
             ) : null}
         </View>
+        <TextInput />
         
-
         <Text style={styles.label}>비밀번호</Text>
         <TextInput 
           style={styles.input} 
@@ -149,7 +158,7 @@ export default function SignupScreen() {
           valueField="value"
           placeholder="국적을 선택해주세요"
           value={selectedCountry}
-          onChange={(item) => setSelectedCountry(item.value)}
+          onChange={(item: DropdownItem) => setSelectedCountry(item.value)}
         />
 
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
@@ -188,7 +197,6 @@ const styles = StyleSheet.create({
     borderColor: '#BDBDBD',
     paddingHorizontal: 10,
     borderRadius: 5,
-    backgroundColor: '#fff',
     marginBottom: 10,
   },
   row: {
@@ -234,3 +242,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default SignupScreen;

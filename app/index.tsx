@@ -9,6 +9,9 @@ export default function HomeScreen() {
       <TouchableOpacity style={styles.button} onPress={() => router.push('/auth/signup')}>
         <Text style={styles.text}>회원가입</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/auth/login')}>
+        <Text style={styles.text}>로그인</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -22,7 +25,6 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#3E7BC9',
-    borderRadius: 10,
     height: 44,
     justifyContent: 'center',
     paddingHorizontal: 20,
