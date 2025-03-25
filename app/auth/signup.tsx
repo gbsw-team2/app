@@ -48,6 +48,7 @@ const SignupScreen: FC = () => {
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
 
   const handleSendCode = () => {
+    //이메일 관련 코드 짜야함
     setIsCodeSent(true);
   }
 
@@ -55,13 +56,13 @@ const SignupScreen: FC = () => {
     let isValid = true
     setConfirmPasswordError('')
     setEmailError('')
-    if (!emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
+    if (!emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry || !isCodeSent) {
       Alert.alert('모든 항목을 입력해 주세요!', 'Please enter all items!');
       return;
     }
 
     if (password !== confirmPassword) {
-      setConfirmPasswordError('비밀번호가 일치하지 않습니다 Password does not match');
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다 \nPassword does not match');
       isValid = false
     }
 
@@ -73,7 +74,7 @@ const SignupScreen: FC = () => {
 
     const regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
     if (!regPassword.test(password)) {
-      setPasswordError('비밀번호는 영문, 숫자, 특수문자 포함 8자 이상이어야 합니다\nPassword must be 8+ characters with letters, numbers, and symbols');
+      setPasswordError('비밀번호는 영문, 숫자, 특수문자 포함 8자 이상이어야 합니다\nPassword: 8+ chars (letters, numbers, symbols)');
       isValid = false;
     }
 
@@ -174,7 +175,7 @@ const SignupScreen: FC = () => {
           onChange={(item: DropdownItem) => setSelectedCountry(item.value)}
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <TouchableOpacity style={[styles.button, {marginTop: "auto"}]} onPress={handleSignUp}>
           <Text style={styles.buttonText}>회원가입</Text>
         </TouchableOpacity>
       </View>
@@ -211,6 +212,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
     marginBottom: 10,
+    padding: 0,
   },
   row: {
     flexDirection: 'row',
