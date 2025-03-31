@@ -46,17 +46,63 @@ const SignupScreen: FC = () => {
   const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
+  const [userCode, setUserCode] = useState<string>('');
+  const [isVerified, setIsVerified] = useState<boolean>(false);
 
-  const handleSendCode = () => {
-    //이메일 관련 코드 짜야함
-    setIsCodeSent(true);
-  }
+  const handleSendCode = async () => {
+    if (!emailId || !selectedEmail) {
+      setEmailError('이메일을 입력해주세요.')
+      return;
+    }
+    // setIsCodeSent(true); //버튼 바뀌는지 테스트용
+    try {
+      const fullEmail = `${emailId}@${selectedEmail}`;
+      const response = await axios.post('백엔드', { email: fullEmail });
+
+      if (response.data.success) {
+        setIsCodeSent(true)
+        Alert.alert('인증번호가 발송되었습니다!')
+      } else {
+        Alert.alert('인증번호 발송 실패')
+      }
+    } catch (error) {
+      console.error(error)
+      Alert.alert('오류 발생')
+    }
+}
+
+  const handleVerifyCode = async () => {
+    if (!userCode) {
+      Alert.alert('인증번호를 입력해주세요.');
+      return;
+    }
+    try {
+      const response = await axios.post('http://백엔드/api/verify-code', {
+        email: `${emailId}@${selectedEmail}`,
+        code: userCode,
+      });
+
+      if (response.data.success) {
+        setIsVerified(true);
+        Alert.alert('이메일 인증 성공');
+      } else {
+        Alert.alert('인증번호가 일치하지 않습니다.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('서버 오류');
+    }
+  };
 
   const handleSignUp = async (): Promise<void> => {
     let isValid = true
+    if (!isVerified) {
+      Alert.alert('이메일 인증을 완료해주세요.')
+      return
+    }
     setConfirmPasswordError('')
     setEmailError('')
-    if (!emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry || !isCodeSent) {
+    if (!emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
       Alert.alert('모든 항목을 입력해 주세요!', 'Please enter all items!');
       return;
     }
@@ -129,12 +175,32 @@ const SignupScreen: FC = () => {
             ) : null}
         </View>
         <View style={styles.row}>
-          <TextInput 
-            style={[styles.input, {flex: 1, marginRight:16}]}
-          />
-          <TouchableOpacity style={[styles.sendButton]} onPress={handleSendCode}>
-            <Text style={[styles.buttonText]}>{isCodeSent ? '인증' : '인증번호 발송'}</Text>
-          </TouchableOpacity>
+          {!isCodeSent ? (
+            <>
+              <TextInput 
+                style={[styles.input, {flex: 1, marginRight:16}]}
+                value={userCode}
+                onChangeText={setUserCode}
+                keyboardType="number-pad"
+              />
+              <TouchableOpacity style={styles.sendButton} onPress={handleSendCode}>
+                <Text style={styles.buttonText}>인증번호 발송</Text>
+              </TouchableOpacity>
+            </>
+            
+          ) : (
+            <>
+              <TextInput 
+                style={[styles.input, {flex: 1, marginRight:16}]}
+                value={userCode}
+                onChangeText={setUserCode}
+                keyboardType="number-pad"
+              />
+              <TouchableOpacity style={[styles.sendButton]} onPress={handleVerifyCode}>
+                <Text style={[styles.buttonText]}>인증</Text>
+              </TouchableOpacity>
+            </>          
+          )}
         </View>
         
         <Text style={styles.label}>비밀번호</Text>
