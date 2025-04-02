@@ -20,15 +20,17 @@ const NewPostScreen = () => {
         <TextInput
           value={title}
           onChangeText={setTitle}
+          style={styles.input}
         />
-        <Text>내용</Text>
+        <Text style={styles.label}>내용</Text>
         <TextInput
           value={content}
           onChangeText={setContent}
           multiline
+          style={[styles.input, {height:360}]}
         />
-        <TouchableOpacity onPress={handleSubmit}>
-          <Text>게시</Text>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>게시</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -54,8 +56,31 @@ const styles = StyleSheet.create({
     color: '#3E7BC9',
   },
   label: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
-  }
+  },
+  input: {
+    height: 48,
+    borderWidth: 1,
+    borderColor: '#BDBDBD',
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+    padding: 0,
+  },
+  button: {
+    backgroundColor: '#3E7BC9',
+    marginTop: 'auto',
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 })
