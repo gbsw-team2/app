@@ -4,11 +4,23 @@ import { useState } from "react";
 const NewPostScreen = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [titleError, setTitleError] = useState<string>('');
+  const [contentError, setContentError] = useState<string>('');
 
   const handleSubmit = async () => {
-    if (!title || !content) {
-      alert("제목과 내용을 입력해주세요.");
+    if (!title && !content) {
+      alert("모든 항목을 입력해주세요..");
       return;
+    }
+    if (!title) {
+      setTitleError('*제목을 입력해주세요')
+    } else {
+      setTitleError('')
+    }
+    if (!content) {
+      setContentError('*내용을 입력해주세요')
+    } else {
+      setContentError('')
     }
   };
 
@@ -22,6 +34,9 @@ const NewPostScreen = () => {
           onChangeText={setTitle}
           style={styles.input}
         />
+        {titleError ? (
+          <Text style={styles.errorText}>{titleError}</Text>
+        ) : null}
         <Text style={styles.label}>내용</Text>
         <TextInput
           value={content}
@@ -29,6 +44,9 @@ const NewPostScreen = () => {
           multiline
           style={[styles.input, {height:360}]}
         />
+        {contentError ? (
+          <Text style={styles.errorText}>{contentError}</Text>
+        ) : null}
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>게시</Text>
         </TouchableOpacity>
@@ -66,7 +84,6 @@ const styles = StyleSheet.create({
     borderColor: '#BDBDBD',
     paddingHorizontal: 10,
     borderRadius: 5,
-    marginBottom: 20,
     padding: 0,
   },
   button: {
@@ -82,5 +99,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+    fontSize: 13,
   },
 })
