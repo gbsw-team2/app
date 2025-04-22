@@ -2,9 +2,9 @@ import { View, Text, TextInput, TouchableOpacity, SafeAreaView,StyleSheet } from
 import { useState } from "react";
 import BackHeader from "@/components/ui/BackHeader";
 
-const NewPostScreen = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+const NewWrite = () => {
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
   const [titleError, setTitleError] = useState<string>('');
   const [contentError, setContentError] = useState<string>('');
 
@@ -56,7 +56,7 @@ const NewPostScreen = () => {
   );
 };
 
-export default NewPostScreen;
+export default NewWrite;
 
 const styles = StyleSheet.create({
   safeArea: {

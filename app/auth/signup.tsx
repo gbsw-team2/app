@@ -1,9 +1,10 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, BackHandler } from "react-native";
 import { useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
 import type { FC } from 'react';
+import BackHeader from "@/components/ui/BackHeader";
 
 interface DropdownItem {
   label: string;
@@ -244,6 +245,8 @@ const SignupScreen: FC = () => {
         <TouchableOpacity style={[styles.button, {marginTop: "auto"}]} onPress={handleSignUp}>
           <Text style={styles.buttonText}>회원가입</Text>
         </TouchableOpacity>
+
+        <BackHeader text="d"/>
       </View>
     </SafeAreaView>
   );

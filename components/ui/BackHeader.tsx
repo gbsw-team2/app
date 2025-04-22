@@ -4,7 +4,7 @@ import React from "react"
 import { MaterialIcons } from "@expo/vector-icons"
 
 type headerProps = {
-  text?: string
+  text: string,
 }
 
 const BackHeader: React.FC<headerProps> = ({text}) => {

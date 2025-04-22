@@ -1,11 +1,11 @@
-// import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-// export default function HomeScreen() {
-//   return (
-//     <View>
-//     </View>
-//   );
-// }
+export default function HomeScreen() {
+  return (
+    <View>
+    </View>
+  );
+}
 
-// const styles = StyleSheet.create({
-// });
+const styles = StyleSheet.create({
+});
