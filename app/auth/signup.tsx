@@ -252,13 +252,13 @@ const SignupScreen: FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#F8F8F8'
   },
   container: {
     flex: 1,
     padding: 20,
     paddingTop: 60,
-    backgroundColor: '#fff',
+    backgroundColor: '#F8F8F8',
   },
   title: {
     fontSize: 24,
@@ -306,7 +306,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     height: 48,
     justifyContent: 'center',
-    backgroundColor: '#fff',
     marginBottom: 10,  
   },  
   button: {

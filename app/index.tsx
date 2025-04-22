@@ -16,7 +16,8 @@ export default function HomeScreen() {
         </TouchableOpacity>
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>이미 계정이 있나요? </Text>
-          <TouchableOpacity onPress={() => router.push('/auth/login')}>
+          {/* onPress={() => router.push('/auth/login')} */}
+          <TouchableOpacity>
             <Text style={styles.loginLink}>로그인</Text>
           </TouchableOpacity>
         </View>
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#F8F8F8',
     paddingHorizontal: 20,
   },
   logoContainer: {

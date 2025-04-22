@@ -1,5 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView,StyleSheet } from "react-native";
 import { useState } from "react";
+import BackHeader from "@/components/ui/BackHeader";
 
 const NewPostScreen = () => {
   const [title, setTitle] = useState("");
@@ -26,8 +27,8 @@ const NewPostScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <BackHeader text="글쓰기"/>
       <View style={styles.container}>
-        <Text style={styles.title}>글쓰기</Text>
         <Text style={styles.label}>제목</Text>
         <TextInput
           value={title}
@@ -60,18 +61,11 @@ export default NewPostScreen;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#F8F8F8'
   },
   container: {
     flex: 1,
     padding: 20,
-    paddingTop: 60,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#3E7BC9',
   },
   label: {
     fontSize: 20,
