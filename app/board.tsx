@@ -7,7 +7,8 @@ const BoardScreen = () => {
       <View style={styles.container}>
         <Text style={styles.title}>행사 리스트</Text>
         <EventList />
-        <Text style={[styles.title, {marginTop:32}]}>게시글</Text>
+        <Text style={[styles.title, {marginTop:8, marginBottom:4}]}>게시글</Text>
+        <View style={styles.boardList}></View>
       </View>
     </SafeAreaView>
   )
@@ -22,12 +23,18 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
     paddingTop: 60,
   },
   title: {
+    paddingLeft: 20,
     color: '#3E7BC9',
+    fontSize: 16,
     fontWeight: '500',
-    marginBottom: 8,
-  }
+  },
+  boardList: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
 })

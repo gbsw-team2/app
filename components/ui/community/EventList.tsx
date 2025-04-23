@@ -21,8 +21,15 @@ const eventList: eventListProps[] = [
     title: "당항포대첩축제",
     startDate: "2025-05-09",
     endDate: "2025-05-11",
-    place: "경남 고성군 회화면 당항만로 1116 당항포관광지",
+    place: "당항포관광지",
   },
+  {
+    title: "이천도자기축제",
+    startDate: "2025-04-25",
+    endDate: "2025-05-06",
+    place: "이천시 신둔면 예스파크",
+    link: "http://www.ceramic.or.kr"
+  }
 ];
 
 const EventList: React.FC<eventListProps> = ({link}) => {
