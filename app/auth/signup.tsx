@@ -38,6 +38,7 @@ const countryData: DropdownItem[] = [
 const SignupScreen: FC = () => {
   const router = useRouter();
 
+  const [name, setName] = useState<string>('')
   const [selectedEmail, setSelectedEmail] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [emailId, setEmailId] = useState<string>('');
@@ -103,25 +104,25 @@ const SignupScreen: FC = () => {
     }
     setConfirmPasswordError('')
     setEmailError('')
-    if (!emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
-      Alert.alert('모든 항목을 입력해 주세요!', 'Please enter all items!');
+    if (!name || !emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
+      Alert.alert('모든 항목을 입력해 주세요!');
       return;
     }
 
     if (password !== confirmPassword) {
-      setConfirmPasswordError('비밀번호가 일치하지 않습니다 \nPassword does not match');
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다');
       isValid = false
     }
 
     const regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
     if (!regEmail.test(`${emailId}@${selectedEmail}`)) {
-      setEmailError('올바른 이메일 형식이 아닙니다 \nThe email format is not valid');
+      setEmailError('올바른 이메일 형식이 아닙니다');
       isValid = false;
     }
 
     const regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
     if (!regPassword.test(password)) {
-      setPasswordError('비밀번호는 영문, 숫자, 특수문자 포함 8자 이상이어야 합니다\nPassword: 8+ chars (letters, numbers, symbols)');
+      setPasswordError('비밀번호는 영문, 숫자, 특수문자 포함 8자 이상이어야 합니다');
       isValid = false;
     }
 
@@ -130,6 +131,7 @@ const SignupScreen: FC = () => {
     const fullEmail = `${emailId}@${selectedEmail}`;
 
     const requestBody = {
+      name: name,
       email: fullEmail,
       password: password,
       country: selectedCountry,
@@ -149,6 +151,17 @@ const SignupScreen: FC = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <Text style={styles.title}>회원가입</Text>
+
+        <Text style={styles.label}>이름</Text>
+        <TextInput 
+          style={styles.input} 
+          onChangeText={(text) => {
+          setPassword(text);
+          setPasswordError('');
+        }}/>
+        {passwordError ? (
+          <Text style={styles.errorText}>{passwordError}</Text>
+        ) : null}
 
         <Text style={styles.label}>이메일주소</Text>
         <View style={styles.row}>
@@ -245,8 +258,6 @@ const SignupScreen: FC = () => {
         <TouchableOpacity style={[styles.button, {marginTop: "auto"}]} onPress={handleSignUp}>
           <Text style={styles.buttonText}>회원가입</Text>
         </TouchableOpacity>
-
-        <BackHeader text="d"/>
       </View>
     </SafeAreaView>
   );

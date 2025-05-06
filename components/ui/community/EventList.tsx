@@ -32,7 +32,7 @@ const eventList: eventListProps[] = [
   }
 ];
 
-const EventList: React.FC<eventListProps> = ({link}) => {
+const EventList: React.FC<eventListProps> = () => {
   const handlePress = (url?: string) => {
     if (url) {
       Linking.openURL(url).catch(err => console.error("링크 열기 실패: ", err));
@@ -63,7 +63,7 @@ const EventList: React.FC<eventListProps> = ({link}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    gap: 12,
+    gap: 8,
   },
   eventCard: {
     width: 260, 
@@ -72,15 +72,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   title: {
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: "bold",
     marginBottom: 4,
   },
   info: {
-    fontSize: 14,
+    fontSize: 12,
   },
   linkText: {
-    fontSize: 14,
+    fontSize: 11,
     color: "#525252",
     alignSelf: "flex-end",
     textDecorationLine: "underline",
