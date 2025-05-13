@@ -1,10 +1,10 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, BackHandler } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from "react-native";
 import { useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
+import { sendVerificationCode, verifyCode, signup } from "../api/auth";
 import type { FC } from 'react';
-import BackHeader from "@/components/ui/BackHeader";
 
 interface DropdownItem {
   label: string;
@@ -56,10 +56,10 @@ const SignupScreen: FC = () => {
       setEmailError('이메일을 입력해주세요.')
       return;
     }
-    // setIsCodeSent(true); //버튼 바뀌는지 테스트용
+    setIsCodeSent(true); //버튼 바뀌는지 테스트용
     try {
       const fullEmail = `${emailId}@${selectedEmail}`;
-      const response = await axios.post('백엔드', { email: fullEmail });
+      const response = await sendVerificationCode(fullEmail);
 
       if (response.data.success) {
         setIsCodeSent(true)
@@ -79,10 +79,7 @@ const SignupScreen: FC = () => {
       return;
     }
     try {
-      const response = await axios.post('http://백엔드/api/verify-code', {
-        email: `${emailId}@${selectedEmail}`,
-        code: userCode,
-      });
+      const response = await verifyCode(`${emailId}@${selectedEmail}`, userCode);
 
       if (response.data.success) {
         setIsVerified(true);
@@ -96,17 +93,18 @@ const SignupScreen: FC = () => {
     }
   };
 
-  const handleSignUp = async (): Promise<void> => {
+  const handleSignUp = async () => {
     let isValid = true
-    if (!isVerified) {
-      Alert.alert('이메일 인증을 완료해주세요.')
-      return
-    }
     setConfirmPasswordError('')
     setEmailError('')
     if (!name || !emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
       Alert.alert('모든 항목을 입력해 주세요!');
       return;
+    }
+
+    if (!isVerified) {
+      Alert.alert('이메일 인증을 완료해주세요.')
+      return
     }
 
     if (password !== confirmPassword) {
@@ -138,12 +136,12 @@ const SignupScreen: FC = () => {
     };
 
     try {
-      const response = await axios.post('http://백엔드/api/users', requestBody);
-      Alert.alert('회원가입 성공', 'sign up successful');
+      const response = await signup(requestBody)
+      Alert.alert('회원가입 성공');
       //로그인 화면 이동 
     } catch (error) {
       console.error(error);
-      Alert.alert('회원가입 실패', 'sign up failed');      
+      Alert.alert('회원가입 실패');      
     }
   };
 
@@ -156,12 +154,8 @@ const SignupScreen: FC = () => {
         <TextInput 
           style={styles.input} 
           onChangeText={(text) => {
-          setPassword(text);
-          setPasswordError('');
+            setName(text);
         }}/>
-        {passwordError ? (
-          <Text style={styles.errorText}>{passwordError}</Text>
-        ) : null}
 
         <Text style={styles.label}>이메일주소</Text>
         <View style={styles.row}>
@@ -178,7 +172,7 @@ const SignupScreen: FC = () => {
             data={emailData}
             labelField="label"
             valueField="value"
-            placeholder="이메일을 선택해주세요"
+            placeholder="이메일선택"
             value={selectedEmail}
             onChange={(item: DropdownItem) => setSelectedEmail(item.value)}
           />
@@ -250,7 +244,7 @@ const SignupScreen: FC = () => {
           data={countryData}
           labelField="label"
           valueField="value"
-          placeholder="국적을 선택해주세요"
+          placeholder="국적선택"
           value={selectedCountry}
           onChange={(item: DropdownItem) => setSelectedCountry(item.value)}
         />

@@ -14,7 +14,7 @@ const TabBar = () => {
         <View style={styles.tabItem}>
           <MaterialIcons name="chat" size={20} color={isBoardRoute ? "#3E7BC9" : "#989898"} />
           <Text style={[styles.tabText, isBoardRoute && styles.activeText]}>
-            메시지
+            커뮤니티
           </Text>
         </View>
       </TouchableOpacity>
@@ -22,13 +22,13 @@ const TabBar = () => {
       <TouchableOpacity>
         <View style={styles.tabItem}>
           <MaterialIcons name="translate" size={20} color="#989898" />
-          <Text style={styles.tabText}>AI 번역</Text>
+          <Text style={styles.tabText}>번역</Text>
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity>
         <View style={styles.tabItem}>
-          <MaterialIcons name="person" size={20} color="#989898" />
+          <MaterialIcons name="account-circle" size={20} color="#989898" />
           <Text style={styles.tabText}>프로필</Text>
         </View>
       </TouchableOpacity>

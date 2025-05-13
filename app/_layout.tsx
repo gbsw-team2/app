@@ -40,6 +40,7 @@ export default function RootLayout() {
           <Stack.Screen name="auth/login" />
           <Stack.Screen name="board" />
           <Stack.Screen name="board/new" />
+          <Stack.Screen name="board/view" />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
