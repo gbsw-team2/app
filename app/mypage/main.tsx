@@ -20,7 +20,7 @@ export default function Main() {
                 </View>
 
                 <View style={styles.infobox}>
-                    <Text style={styles.name}>Nguyễn Công Phượng <Text style={{ color: '#3E7BC9' }}>(응우옌꽁프엉)</Text></Text>
+                    <Text style={styles.name}>Nguyễn Công Phượng</Text>
                     <Text style={styles.info}>23세 여</Text>
                     <Text style={styles.info}>베트남</Text>
                     <Text style={styles.phone}>+84 093-1345134</Text>
@@ -28,7 +28,7 @@ export default function Main() {
                 </View>
 
                 <View style={styles.menuBox}>
-                    <View style={styles.menuItem}>
+                    <View style={styles.answermenuItem}>
                         <Text style={styles.menuText}>AI에게 질문하기</Text>
                     </View>
                     <TouchableOpacity style={styles.menuItem}>
@@ -39,6 +39,11 @@ export default function Main() {
                     </TouchableOpacity>
                 </View>
 
+                <View style={styles.logocontainer}>
+                    <Text style={styles.logotitle}>DOUMI</Text>
+                    <Text style={styles.subtitle}>외국인을 더욱 편하게</Text>
+                </View>
+                
                 <TouchableOpacity style={styles.logout}>
                     <Text style={styles.logoutText}>로그아웃</Text>
                 </TouchableOpacity>
@@ -58,10 +63,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F8F8',
     },
     scrollContent: {
-        flex: 1,
         padding: 20,
         paddingTop: 60,
-        backgroundColor: '#fff',
     },
     title: {
         fontSize: 22,
@@ -119,6 +122,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginBottom: 10,
     },
+    answermenuItem: {
+        backgroundColor: '#F0F0F0',
+        padding: 14,
+        height: 100,
+        borderRadius: 8,
+        marginBottom: 10,
+    },
     menuText: {
         fontSize: 14,
         color: '#000',
@@ -141,5 +151,22 @@ const styles = StyleSheet.create({
     footerText: {
         fontSize: 12,
         color: '#666',
+    },
+    logocontainer: {
+        padding: 20,
+        paddingTop: 20,
+    },
+    logotitle: {
+        fontSize: 48,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: '#898989',
+    },
+    subtitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+        color: '#898989',
     },
 });
