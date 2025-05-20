@@ -41,7 +41,7 @@ const WriteList: React.FC = () => {
   return (
     <ScrollView>
       {writeList.map((write, idx) => (
-        <View key={idx} style={[styles.container, styles.border]}>
+        <View key={idx} style={[styles.container, styles.border]} >
           <Text style={styles.text}>{write.title}</Text>
           <View style={styles.iconContainer}>
             <View style={styles.iconWithText}>
