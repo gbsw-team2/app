@@ -2,8 +2,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Aler
 import { useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
 import { useRouter } from 'expo-router';
-import axios from 'axios';
 import type { FC } from 'react';
+import { sendVerificationCode, verifyCode, signup } from "../api/auth";
 
 interface DropdownItem {
   label: string;
@@ -37,6 +37,7 @@ const countryData: DropdownItem[] = [
 const SignupScreen: FC = () => {
   const router = useRouter();
 
+  const [userName, setUserName] = useState<string>('');
   const [selectedEmail, setSelectedEmail] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [emailId, setEmailId] = useState<string>('');
@@ -51,37 +52,34 @@ const SignupScreen: FC = () => {
 
   const handleSendCode = async () => {
     if (!emailId || !selectedEmail) {
-      setEmailError('이메일을 입력해주세요.')
+      setEmailError('이메일을 입력해주세요.');
       return;
     }
-    // setIsCodeSent(true); //버튼 바뀌는지 테스트용
+  
+    const fullEmail = `${emailId}@${selectedEmail}`;
     try {
-      const fullEmail = `${emailId}@${selectedEmail}`;
-      const response = await axios.post('백엔드', { email: fullEmail });
-
+      const response = await sendVerificationCode(fullEmail);
       if (response.data.success) {
-        setIsCodeSent(true)
-        Alert.alert('인증번호가 발송되었습니다!')
+        setIsCodeSent(true);
+        Alert.alert('인증번호가 발송되었습니다!');
       } else {
-        Alert.alert('인증번호 발송 실패')
+        Alert.alert('인증번호 발송 실패');
       }
     } catch (error) {
-      console.error(error)
-      Alert.alert('오류 발생')
+      console.error(error);
+      Alert.alert('오류 발생');
     }
-}
+  };
 
   const handleVerifyCode = async () => {
     if (!userCode) {
       Alert.alert('인증번호를 입력해주세요.');
       return;
     }
+  
+    const fullEmail = `${emailId}@${selectedEmail}`;
     try {
-      const response = await axios.post('http://백엔드/api/verify-code', {
-        email: `${emailId}@${selectedEmail}`,
-        code: userCode,
-      });
-
+      const response = await verifyCode(fullEmail, userCode);
       if (response.data.success) {
         setIsVerified(true);
         Alert.alert('이메일 인증 성공');
@@ -102,25 +100,25 @@ const SignupScreen: FC = () => {
     }
     setConfirmPasswordError('')
     setEmailError('')
-    if (!emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
-      Alert.alert('모든 항목을 입력해 주세요!', 'Please enter all items!');
+    if (!userName || !emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
+      Alert.alert('모든 항목을 입력해 주세요!');
       return;
     }
 
     if (password !== confirmPassword) {
-      setConfirmPasswordError('비밀번호가 일치하지 않습니다 \nPassword does not match');
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다');
       isValid = false
     }
 
     const regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
     if (!regEmail.test(`${emailId}@${selectedEmail}`)) {
-      setEmailError('올바른 이메일 형식이 아닙니다 \nThe email format is not valid');
+      setEmailError('올바른 이메일 형식이 아닙니다');
       isValid = false;
     }
 
     const regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
     if (!regPassword.test(password)) {
-      setPasswordError('비밀번호는 영문, 숫자, 특수문자 포함 8자 이상이어야 합니다\nPassword: 8+ chars (letters, numbers, symbols)');
+      setPasswordError('비밀번호는 영문, 숫자, 특수문자 포함 8자 이상이어야 합니다');
       isValid = false;
     }
 
@@ -129,18 +127,19 @@ const SignupScreen: FC = () => {
     const fullEmail = `${emailId}@${selectedEmail}`;
 
     const requestBody = {
+      name: 'placeholder',
       email: fullEmail,
       password: password,
       country: selectedCountry,
     };
 
     try {
-      const response = await axios.post('http://백엔드/api/users', requestBody);
-      Alert.alert('회원가입 성공', 'sign up successful');
-      //로그인 화면 이동 
+      const response = await signup(requestBody);
+      Alert.alert('회원가입 성공');
+      //로그인 화면으로 이동
     } catch (error) {
       console.error(error);
-      Alert.alert('회원가입 실패', 'sign up failed');      
+      Alert.alert('회원가입 실패');
     }
   };
 
@@ -149,6 +148,12 @@ const SignupScreen: FC = () => {
       <View style={styles.container}>
         <Text style={styles.title}>회원가입</Text>
 
+        <Text style={styles.label}>이름</Text>
+        <TextInput 
+          style={styles.input} 
+          onChangeText={(text) => {
+          setUserName(text);
+        }}/>
         <Text style={styles.label}>이메일주소</Text>
         <View style={styles.row}>
           <TextInput 
@@ -164,7 +169,7 @@ const SignupScreen: FC = () => {
             data={emailData}
             labelField="label"
             valueField="value"
-            placeholder="이메일을 선택해주세요"
+            placeholder="이메일선택"
             value={selectedEmail}
             onChange={(item: DropdownItem) => setSelectedEmail(item.value)}
           />
@@ -236,7 +241,7 @@ const SignupScreen: FC = () => {
           data={countryData}
           labelField="label"
           valueField="value"
-          placeholder="국적을 선택해주세요"
+          placeholder="국적선택"
           value={selectedCountry}
           onChange={(item: DropdownItem) => setSelectedCountry(item.value)}
         />
