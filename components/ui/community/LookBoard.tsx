@@ -20,7 +20,7 @@ const LookBoard = () => {
       </Text>
       <View style={styles.likeIcon}>
         <EvilIcons name="heart" size={44} />
-        <Text>12</Text>
+        <Text style={{marginTop: -8}}>12</Text>
       </View>
     </View>
   )
