@@ -7,6 +7,7 @@ const TabBar = () => {
   const router = useRouter();
   const route = useRoute();
   const isBoardRoute = route.name.startsWith('board');
+  const isMyPageRoute = route.name.startsWith('mypage');
 
   return (
     <View style={styles.tabBar}>
@@ -26,10 +27,10 @@ const TabBar = () => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => router.push('/mypage/main')}>
         <View style={styles.tabItem}>
-          <MaterialIcons name="account-circle" size={20} color="#989898" />
-          <Text style={styles.tabText}>프로필</Text>
+          <MaterialIcons name="account-circle" size={20} color={isMyPageRoute ? "#3E7BC9" : "#989898"} />
+          <Text style={[styles.tabText, isMyPageRoute && styles.activeText]}>프로필</Text>
         </View>
       </TouchableOpacity>
     </View>

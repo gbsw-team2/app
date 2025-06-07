@@ -1,9 +1,16 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image, ScrollView } from "react-native";
+import BackHeader from "@/components/ui/BackHeader"
+import { useRouter } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
+
 
 export default function Main() {
+    const router = useRouter();
+
     return (
         <SafeAreaView style={styles.safeArea}>
+            <BackHeader text="마이페이지"/>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <Text style={styles.title}>
                     <Text style={{ color: '#3E7BC9', fontWeight: 'bold' }}>Nguyễn</Text>님 환영합니다
@@ -21,7 +28,6 @@ export default function Main() {
 
                 <View style={styles.infobox}>
                     <Text style={styles.name}>Nguyễn Công Phượng</Text>
-                    <Text style={styles.info}>23세 여</Text>
                     <Text style={styles.info}>베트남</Text>
                     <Text style={styles.phone}>+84 093-1345134</Text>
                     <Text style={styles.modify}>수정하기</Text>
@@ -29,13 +35,18 @@ export default function Main() {
 
                 <View style={styles.menuBox}>
                     <View style={styles.answermenuItem}>
-                        <Text style={styles.menuText}>AI에게 질문하기</Text>
+                        <Text style={[styles.menuText,{fontWeight:'500'}]}>112/119 긴급 신고</Text>
+                        <TouchableOpacity style={styles.sosItem} onPress={() => router.push("/mypage/police")}>
+                            <Text style={styles.sosText}>112(경찰서)문자신고</Text>
+                            <AntDesign name="arrowright" color={'#3E7BC9'} size={12} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.sosItem} onPress={() => router.push("/mypage/hospital")}>
+                            <Text style={styles.sosText}>119(소방서/병원)문자신고</Text>
+                            <AntDesign name="arrowright" color={'#3E7BC9'} size={12} />
+                        </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.menuItem}>
                         <Text style={styles.menuText}>비밀번호 변경</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
-                        <Text style={styles.menuText}>112/119 긴급 신고</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -125,7 +136,6 @@ const styles = StyleSheet.create({
     answermenuItem: {
         backgroundColor: '#F0F0F0',
         padding: 14,
-        height: 100,
         borderRadius: 8,
         marginBottom: 10,
     },
@@ -168,5 +178,20 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 20,
         color: '#898989',
+    },
+    sosItem: {
+        backgroundColor: '#fff',
+        marginTop: 8,
+        paddingVertical: 12, 
+        paddingHorizontal: 16, 
+        borderRadius: 8, 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        flexDirection: 'row',
+    },
+    sosText: {
+        color: '#3E7BC9',
+        fontWeight: '500',
+        fontSize: 14,
     },
 });
