@@ -42,6 +42,7 @@ export default function RootLayout() {
           <Stack.Screen name="board/new" />
           <Stack.Screen name="board/view" />
           <Stack.Screen name="mypage/main" />
+          <Stack.Screen name="mypage/police" />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

@@ -4,35 +4,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { useRouter } from 'expo-router';
 import type { FC } from 'react';
 import { sendVerificationCode, verifyCode, signup } from "../api/auth";
-
-interface DropdownItem {
-  label: string;
-  value: string;
-}
-
-const emailData: DropdownItem[] = [
-  { label: 'gmail.com', value: 'gmail.com' },
-  { label: 'naver.com', value: 'naver.com' },
-  { label: 'icloud.com', value: 'icloud.com' },
-  { label: 'kakao.com', value: 'kakao.com' },
-  { label: 'daum.net', value: 'daum.net' },
-  { label: 'hanmail.net', value: 'hanmail.net' },
-];
-
-//임시
-const countryData: DropdownItem[] = [
-  { label: '미국', value: '1' },
-  { label: '중국', value: '2' },
-  { label: '일본', value: '3' },
-  { label: '캐나다', value: '4' },
-  { label: '베트남', value: '5' },
-  { label: '필리핀', value: '6' },
-  { label: '캄보디아', value: '7' },
-  { label: '우즈베키스탄', value: '8' },
-  { label: '호주', value: '9' },
-  { label: '러시아', value: '10' },
-  { label: '가나', value: '11' },
-];
+import { Email, Country, DropdownItem } from "@/constants/User";
 
 const SignupScreen: FC = () => {
   const router = useRouter();
@@ -49,6 +21,7 @@ const SignupScreen: FC = () => {
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
   const [userCode, setUserCode] = useState<string>('');
   const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [guardianPhone, setGuardianPhone] = useState<string>('');
 
   const handleSendCode = async () => {
     if (!emailId || !selectedEmail) {
@@ -131,7 +104,9 @@ const SignupScreen: FC = () => {
       email: fullEmail,
       password: password,
       country: selectedCountry,
+      guardianPhone: guardianPhone, 
     };
+    
 
     try {
       const response = await signup(requestBody);
@@ -166,7 +141,7 @@ const SignupScreen: FC = () => {
           <Text style={styles.symbol}>@</Text>
           <Dropdown
             style={[styles.dropdown, { flex: 2 }]}
-            data={emailData}
+            data={Email}
             labelField="label"
             valueField="value"
             placeholder="이메일선택"
@@ -238,12 +213,20 @@ const SignupScreen: FC = () => {
         <Text style={styles.label}>국적</Text>
         <Dropdown
           style={styles.dropdown}
-          data={countryData}
+          data={Country}
           labelField="label"
           valueField="value"
           placeholder="국적선택"
           value={selectedCountry}
           onChange={(item: DropdownItem) => setSelectedCountry(item.value)}
+        />
+
+        <Text style={styles.label}>보호자 연락처(선택)</Text>
+        <TextInput
+          style={styles.input}
+          keyboardType="phone-pad"
+          value={guardianPhone}
+          onChangeText={setGuardianPhone}
         />
 
         <TouchableOpacity style={[styles.button, {marginTop: "auto"}]} onPress={handleSignUp}>

@@ -2,6 +2,9 @@ import React from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+
 
 type WriteListItem = {
   title: string;
@@ -38,11 +41,14 @@ const writeList: WriteListItem[] = [
 ];
 
 const WriteList: React.FC = () => {
+  const router = useRouter();
+  const navigate = useNavigation();
+
   return (
     <ScrollView>
       {writeList.map((write, idx) => (
         <View key={idx} style={[styles.container, styles.border]} >
-          <Text style={styles.text}>{write.title}</Text>
+          <Text onPress={() => router.push("/board/view")} style={styles.text}>{write.title}</Text>
           <View style={styles.iconContainer}>
             <View style={styles.iconWithText}>
               <MaterialCommunityIcons
