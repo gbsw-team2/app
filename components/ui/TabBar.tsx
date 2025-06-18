@@ -2,6 +2,7 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { navigate } from "expo-router/build/global-state/routing";
 
 const TabBar = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const TabBar = () => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigate("/translation/voice")}>
         <View style={styles.tabItem}>
           <MaterialIcons name="translate" size={20} color="#989898" />
           <Text style={styles.tabText}>번역</Text>
