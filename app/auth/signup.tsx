@@ -1,17 +1,16 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from "react-native";
 import { useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
-import { useRouter } from 'expo-router';
+import { router } from "expo-router";
 import type { FC } from 'react';
-import { sendVerificationCode, verifyCode, signup } from "../api/auth";
+import { sendVerificationCode, verifyCode, signup } from '@/api/auth';
 import { Email, Country, DropdownItem } from "@/constants/User";
 
 const SignupScreen: FC = () => {
-  const router = useRouter();
 
   const [userName, setUserName] = useState<string>('');
   const [selectedEmail, setSelectedEmail] = useState<string>('');
-  const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const [selectedCountry, setSelectedCountry] = useState<number>(1);
   const [emailId, setEmailId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -21,7 +20,7 @@ const SignupScreen: FC = () => {
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
   const [userCode, setUserCode] = useState<string>('');
   const [isVerified, setIsVerified] = useState<boolean>(false);
-  const [guardianPhone, setGuardianPhone] = useState<string>('');
+  const [contact, setContact] = useState<string>('');
 
   const handleSendCode = async () => {
     if (!emailId || !selectedEmail) {
@@ -32,10 +31,13 @@ const SignupScreen: FC = () => {
     const fullEmail = `${emailId}@${selectedEmail}`;
     try {
       const response = await sendVerificationCode(fullEmail);
-      if (response.data.success) {
+      console.log();
+      if (response.status == 200) {
         setIsCodeSent(true);
+        console.log('인증번호가 발송되었습니다!');
         Alert.alert('인증번호가 발송되었습니다!');
       } else {
+        console.log('인증번호 발송 실패');
         Alert.alert('인증번호 발송 실패');
       }
     } catch (error) {
@@ -53,7 +55,9 @@ const SignupScreen: FC = () => {
     const fullEmail = `${emailId}@${selectedEmail}`;
     try {
       const response = await verifyCode(fullEmail, userCode);
-      if (response.data.success) {
+
+      console.log(response)
+      if (response.status == 200) {
         setIsVerified(true);
         Alert.alert('이메일 인증 성공');
       } else {
@@ -66,54 +70,65 @@ const SignupScreen: FC = () => {
   };
 
   const handleSignUp = async (): Promise<void> => {
+    console.log("handleSignUp called");
+    console.log('회원가입 시 isVerified 상태:', isVerified);
+
+    if (!userName || !emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
+      Alert.alert('모든 항목을 입력해 주세요!');
+      console.log("Validation failed: missing fields");
+      return;
+    }
+    
     let isValid = true
     if (!isVerified) {
-      Alert.alert('이메일 인증을 완료해주세요.')
+      Alert.alert('이메일 인증을 완료해주세요.');
+      console.log("Email not verified");
       return
     }
     setConfirmPasswordError('')
     setEmailError('')
-    if (!userName || !emailId || !selectedEmail || !password || !confirmPassword || !selectedCountry) {
-      Alert.alert('모든 항목을 입력해 주세요!');
-      return;
-    }
 
     if (password !== confirmPassword) {
       setConfirmPasswordError('비밀번호가 일치하지 않습니다');
-      isValid = false
+      isValid = false;
+      console.log("Password confirmation failed");
     }
 
     const regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
     if (!regEmail.test(`${emailId}@${selectedEmail}`)) {
       setEmailError('올바른 이메일 형식이 아닙니다');
       isValid = false;
+      console.log("Email regex failed");
     }
 
     const regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
     if (!regPassword.test(password)) {
       setPasswordError('비밀번호는 영문, 숫자, 특수문자 포함 8자 이상이어야 합니다');
       isValid = false;
+      console.log("Password regex failed");
     }
 
+    console.log({ isValid, isVerified });
     if (!isValid) return;
 
     const fullEmail = `${emailId}@${selectedEmail}`;
 
     const requestBody = {
-      name: 'placeholder',
+      name: userName,
       email: fullEmail,
       password: password,
       country: selectedCountry,
-      guardianPhone: guardianPhone, 
+      contact: contact, 
     };
     
-
     try {
+      console.log('보내는 데이터:', requestBody);
       const response = await signup(requestBody);
+      console.log('signup response:', response);
       Alert.alert('회원가입 성공');
-      //로그인 화면으로 이동
+      router.replace("/auth/login");
     } catch (error) {
-      console.error(error);
+      console.error('signup error:', error);
       Alert.alert('회원가입 실패');
     }
   };
@@ -146,7 +161,7 @@ const SignupScreen: FC = () => {
             valueField="value"
             placeholder="이메일선택"
             value={selectedEmail}
-            onChange={(item: DropdownItem) => setSelectedEmail(item.value)}
+            onChange={(item: DropdownItem) => setSelectedEmail(String(item.label))}
           />
         </View>
         <View style={{marginTop: -12}}>
@@ -218,15 +233,15 @@ const SignupScreen: FC = () => {
           valueField="value"
           placeholder="국적선택"
           value={selectedCountry}
-          onChange={(item: DropdownItem) => setSelectedCountry(item.value)}
+          onChange={(item: DropdownItem) => setSelectedCountry(Number(item.value))}
         />
 
         <Text style={styles.label}>보호자 연락처(선택)</Text>
         <TextInput
           style={styles.input}
           keyboardType="phone-pad"
-          value={guardianPhone}
-          onChangeText={setGuardianPhone}
+          value={contact}
+          onChangeText={setContact}
         />
 
         <TouchableOpacity style={[styles.button, {marginTop: "auto"}]} onPress={handleSignUp}>

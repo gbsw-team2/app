@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.shinsuji.DOUME"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +37,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7180e79d-d86a-4319-b8c3-5e1961438309"
+      }
     }
   }
 }
