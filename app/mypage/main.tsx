@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image, ScrollView } from "react-native";
 import BackHeader from "@/components/ui/BackHeader"
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
-
 
 export default function Main() {
     const router = useRouter();

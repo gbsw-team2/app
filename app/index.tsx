@@ -17,7 +17,7 @@ export default function HomeScreen() {
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>이미 계정이 있나요? </Text>
           {/* onPress={() => router.push('/auth/login')} */}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/auth/login')}>
             <Text style={styles.loginLink}>로그인</Text>
           </TouchableOpacity>
         </View>
