@@ -32,13 +32,13 @@ const TabBar = () => {
 
       {showTranslateOptions && (
         <View style={styles.dropdownContainer}>
-          <TouchableOpacity onPress={() => { router.push('/translation/voice'); setShowTranslateOptions(false); }}>
+          <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
             <Text style={styles.option}>음성번역</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
             <Text style={styles.option}>이미지번역</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
+          <TouchableOpacity onPress={() => { router.push('/translate/TextTranslate'); setShowTranslateOptions(false); }}>
             <Text style={styles.option}>텍스트번역</Text>
           </TouchableOpacity>
         </View>
