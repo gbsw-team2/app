@@ -3,6 +3,7 @@ import { useRoute } from '@react-navigation/native';
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TabBar = () => {
   const router = useRouter();
@@ -13,43 +14,47 @@ const TabBar = () => {
   const [showTranslateOptions, setShowTranslateOptions] = useState(false);
 
   return (
-    <View style={styles.tabBar}>
-      <TouchableOpacity onPress={() => router.push('/board')}>
-        <View style={styles.tabItem}>
-          <MaterialIcons name="chat" size={20} color={isBoardRoute ? "#3E7BC9" : "#989898"} />
-          <Text style={[styles.tabText, isBoardRoute && styles.activeText]}>
-            커뮤니티
-          </Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => setShowTranslateOptions(!showTranslateOptions)}>
-        <View style={styles.tabItem}>
-          <MaterialIcons name="translate" size={20} color={isTranslateRoute ? "#3E7BC9" : "#989898"} />
-          <Text style={[styles.tabText, isTranslateRoute && styles.activeText]}>번역</Text>
-        </View>
-      </TouchableOpacity>
-
-      {showTranslateOptions && (
-        <View style={styles.dropdownContainer}>
-          <TouchableOpacity onPress={() => { router.push('/translation/voice'); setShowTranslateOptions(false); }}>
-            <Text style={styles.option}>음성번역</Text>
+    <View>
+      <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
+        <View style={styles.tabBar}>
+          <TouchableOpacity onPress={() => router.push('/board')}>
+            <View style={styles.tabItem}>
+              <MaterialIcons name="chat" size={20} color={isBoardRoute ? "#3E7BC9" : "#989898"} />
+              <Text style={[styles.tabText, isBoardRoute && styles.activeText]}>
+                커뮤니티
+              </Text>
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
-            <Text style={styles.option}>이미지번역</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
-            <Text style={styles.option}>텍스트번역</Text>
-          </TouchableOpacity>
-        </View>
-      )}
 
-      <TouchableOpacity onPress={() => router.push('/mypage/main')}>
-        <View style={styles.tabItem}>
-          <MaterialIcons name="account-circle" size={20} color={isMyPageRoute ? "#3E7BC9" : "#989898"} />
-          <Text style={[styles.tabText, isMyPageRoute && styles.activeText]}>프로필</Text>
+          <TouchableOpacity onPress={() => setShowTranslateOptions(!showTranslateOptions)}>
+            <View style={styles.tabItem}>
+              <MaterialIcons name="translate" size={20} color={isTranslateRoute ? "#3E7BC9" : "#989898"} />
+              <Text style={[styles.tabText, isTranslateRoute && styles.activeText]}>번역</Text>
+            </View>
+          </TouchableOpacity>
+
+          {showTranslateOptions && (
+            <View style={styles.dropdownContainer}>
+              <TouchableOpacity onPress={() => { router.push('/translation/voice'); setShowTranslateOptions(false); }}>
+                <Text style={styles.option}>음성번역</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
+                <Text style={styles.option}>이미지번역</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
+                <Text style={styles.option}>텍스트번역</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <TouchableOpacity onPress={() => router.push('/mypage/main')}>
+            <View style={styles.tabItem}>
+              <MaterialIcons name="account-circle" size={20} color={isMyPageRoute ? "#3E7BC9" : "#989898"} />
+              <Text style={[styles.tabText, isMyPageRoute && styles.activeText]}>프로필</Text>
+            </View>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+      </SafeAreaView>
     </View>
   );
 };
@@ -63,6 +68,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
   },
   tabItem: {
     alignItems: 'center',

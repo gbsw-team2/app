@@ -2,10 +2,35 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } fro
 import { useState } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; // 아이콘 추가
+import { navigate } from "expo-router/build/global-state/routing";
+import { login } from "@/api/auth";
+import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignupScreen() {
-  const [password, setPassword] = useState("");
+  
+  const [id, setId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const router = useRouter();
+
+  const handleloginbutton = async () => {
+    try {
+      const res = await login({email: id, password});
+      
+      AsyncStorage.setItem('Token', res.data.accessToken);
+  
+      if (res.status === 200) {
+        console.log("로그인 성공");
+        router.push('/board')
+      } else {
+        console.log("로그인 실패", res.status);
+      }
+    } catch (e) {
+      console.error("로그인 중 에러 발생", e);
+    }
+  };  
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -16,7 +41,11 @@ export default function SignupScreen() {
         </View>
 
         <Text style={styles.label}>아이디</Text>
-        <TextInput style={styles.input} placeholder="예) doumi@example.com" />
+        <TextInput style={styles.input} placeholder="예) doumi@example.com"
+          placeholderTextColor="#999"
+          value={id}
+          onChangeText={setId}
+        />
 
         <Text style={styles.label}>비밀번호</Text>
         <View style={styles.passwordContainer}>
@@ -26,6 +55,7 @@ export default function SignupScreen() {
             value={password}
             onChangeText={setPassword}
             placeholder="비밀번호 입력"
+            placeholderTextColor="#999"
           />
           <TouchableOpacity
             style={styles.iconContainer}
@@ -35,7 +65,7 @@ export default function SignupScreen() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleloginbutton}>
           <Text style={styles.buttonText}>로그인</Text>
         </TouchableOpacity>
 

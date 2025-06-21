@@ -1,31 +1,61 @@
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView,StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView,StyleSheet,KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { useState } from "react";
+import { Dropdown } from "react-native-element-dropdown";
 import BackHeader from "@/components/ui/BackHeader";
+import { Country, DropdownItem } from "@/constants/User";
+import { newPost } from "@/api/new";
+import { router } from "expo-router";
 
 const NewWrite = () => {
   const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
+  const [body, setBody] = useState<string>('');
   const [titleError, setTitleError] = useState<string>('');
   const [contentError, setContentError] = useState<string>('');
+  const [selectedCountry, setSelectedCountry] = useState<number>(1);
 
   const handleSubmit = async () => {
-    if (!title && !content) {
-      alert("모든 항목을 입력해주세요..");
+    if (!title || !body) {
+      if (!title) setTitleError('*제목을 입력해주세요');
+      if (!body) setContentError('*내용을 입력해주세요');
+      alert("모든 항목을 입력해주세요.");
       return;
-    }
-    if (!title) {
-      setTitleError('*제목을 입력해주세요')
     } else {
-      setTitleError('')
+      setTitleError('');
+      setContentError('');
     }
-    if (!content) {
-      setContentError('*내용을 입력해주세요')
-    } else {
-      setContentError('')
+    
+  
+    const postData = {
+      title,
+      body,
+      country: selectedCountry,
+    };
+
+    try {
+      const response = await newPost(postData);
+      console.log(response)
+
+      if (response.status == 201) {
+        alert("게시글이 성공적으로 등록되었습니다.");
+        setTitle('');
+        setBody('');
+        router.push("/board");
+      } else {
+        alert("게시글 등록에 실패하였습니다.");
+      }
+    } catch (error) {
+      console.error("Error posting data: ", error);
+      alert("게시 중 오류가 발생하였습니다.");
     }
   };
 
   return (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      // behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+    >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <SafeAreaView style={styles.safeArea}>
       <BackHeader text="글쓰기"/>
       <View style={styles.container}>
@@ -40,19 +70,30 @@ const NewWrite = () => {
         ) : null}
         <Text style={styles.label}>내용</Text>
         <TextInput
-          value={content}
-          onChangeText={setContent}
+          value={body}
+          onChangeText={setBody}
           multiline
           style={[styles.input, {height:360}]}
         />
         {contentError ? (
           <Text style={styles.errorText}>{contentError}</Text>
         ) : null}
+        <Dropdown
+            style={styles.countrySelect}
+            data={Country}
+            labelField="label"
+            valueField="value"
+            placeholder="국적선택"
+            value={selectedCountry}
+            onChange={(item: DropdownItem) => setSelectedCountry(Number(item.value))}
+          />
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>게시</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -70,7 +111,8 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginTop: 8,
+    marginBottom: 4,
   },
   input: {
     height: 48,
@@ -98,5 +140,15 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 10,
     fontSize: 13,
+  },
+  countrySelect: {
+    borderWidth: 1,
+    borderColor: '#BDBDBD',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    height: 48,
+    justifyContent: 'center',
+    marginTop: 12,
+    marginBottom: 10,
   },
 })
