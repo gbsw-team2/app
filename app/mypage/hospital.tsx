@@ -1,9 +1,43 @@
-import { View, StyleSheet, TextInput } from "react-native"
+import { useState, useEffect } from "react";
+import { View, StyleSheet, TextInput, Alert, TouchableOpacity } from "react-native"
 import BackHeader from "@/components/ui/BackHeader"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+import * as SMS from 'expo-sms';
+import * as Location from 'expo-location';
 
 
-const police = () => {
+const hospital = () => {
+  const [number, setNumber] = useState<string>('01065752799')
+  const [text, setText] = useState<string>('');
+  const [isSend, setisSend] = useState<boolean>(false);
+
+  useEffect(() => {
+    if(text.length >= 1) {
+      setisSend(true);
+    }
+    else {
+      setisSend(false);
+    }
+  }, [text]);
+
+  const sendSMS = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert("위치 권한이 필요합니다.");
+      return;
+    }
+
+    const location = await Location.getCurrentPositionAsync({});
+    const { latitude, longitude } = location.coords;
+
+    const messageWithLocation = `${text}\n\n[위치 정보]\nhttps://maps.google.com/?q=${latitude},${longitude}`;
+
+    const { result } = await SMS.sendSMSAsync(number, messageWithLocation);
+        if (result === 'sent') {
+          Alert.alert('발송 성공')
+        }
+  }
+  
   return (
     <View style={styles.Container}>
       <BackHeader text="119 문자신고"/>
@@ -17,8 +51,15 @@ const police = () => {
             />
           </View>
           <View style={styles.ChatInputContainer}>
-            <TextInput style={styles.ChatInput} placeholderTextColor='#BDBDBD' placeholder="메시지를 입력해주세요."/>
+            <TextInput style={styles.ChatInput} placeholderTextColor='#BDBDBD' placeholder="메시지를 입력해주세요." onChangeText={setText}/>
           </View>
+          <TouchableOpacity style={styles.ChatSendButton} onPress={sendSMS}> 
+            <MaterialCommunityIcons 
+                name="arrow-up"
+                color={isSend ? "blue" : "gray"}
+                size={20}
+              />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -52,7 +93,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   ChatInputContainer: {
-    width: 306,
+    width: 286,
     height: 36,
     marginLeft: 12,
     backgroundColor: '#EFEFEF',
@@ -64,7 +105,10 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     fontWeight: 'semibold',
     fontSize: 16
+  },
+  ChatSendButton: {
+    marginLeft: 10,
   }
 })
 
-export default police;
+export default hospital;

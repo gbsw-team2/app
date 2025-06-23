@@ -1,4 +1,5 @@
 import api from "@/utils/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //이메일 보내기
 export const sendVerificationCode = async (email: string) => {
@@ -7,7 +8,7 @@ export const sendVerificationCode = async (email: string) => {
 
 //이메일, 인증번호 보내기
 export const verifyCode = async (email: string, vernum: string) => {
-  return await api.post('/api/users/verify', {email, vernum});
+  return await api.post('/api/email/verify', {email, vernum});
 }
 
 export const signup = async (data: {
@@ -33,4 +34,14 @@ export const login = async (data: {
     }
   }
   );
+}
+
+export const userinfo = async () => {
+  const token = await AsyncStorage.getItem('Token');
+  return await api.get('/api/users/info',
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
 }
