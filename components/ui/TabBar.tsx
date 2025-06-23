@@ -10,12 +10,12 @@ const TabBar = () => {
   const route = useRoute();
   const isBoardRoute = route.name.startsWith('board');
   const isMyPageRoute = route.name.startsWith('mypage');
-  const isTranslateRoute = route.name.startsWith('translation')
+  const isTranslateRoute = route.name.startsWith('translate')
   const [showTranslateOptions, setShowTranslateOptions] = useState(false);
 
   return (
     <View>
-      <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
+      <SafeAreaView style={{  }}>
         <View style={styles.tabBar}>
           <TouchableOpacity onPress={() => router.push('/board')}>
             <View style={styles.tabItem}>
@@ -33,19 +33,19 @@ const TabBar = () => {
             </View>
           </TouchableOpacity>
 
-          {showTranslateOptions && (
-            <View style={styles.dropdownContainer}>
-              <TouchableOpacity onPress={() => { router.push('/translation/voice'); setShowTranslateOptions(false); }}>
-                <Text style={styles.option}>음성번역</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
-                <Text style={styles.option}>이미지번역</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
-                <Text style={styles.option}>텍스트번역</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+      {showTranslateOptions && (
+        <View style={styles.dropdownContainer}>
+          <TouchableOpacity onPress={() => { router.push('/translate/voice'); setShowTranslateOptions(false); }}>
+            <Text style={styles.option}>음성번역</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
+            <Text style={styles.option}>이미지번역</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { router.push('/translate/TextTranslate'); setShowTranslateOptions(false); }}>
+            <Text style={styles.option}>텍스트번역</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
           <TouchableOpacity onPress={() => router.push('/mypage/main')}>
             <View style={styles.tabItem}>
@@ -61,7 +61,7 @@ const TabBar = () => {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: 60,
+    height: 100,
     backgroundColor: '#FAFAFA',
     borderTopColor: '#BDBDBD',
     borderTopWidth: 1,
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 10,
+    paddingBottom: 20,
   },
   tabItem: {
     alignItems: 'center',

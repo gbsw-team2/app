@@ -32,6 +32,10 @@ export default function SignupScreen() {
     }
   };  
 
+  const handleSignupButton = () => {
+    router.push('/auth/signup')
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -70,7 +74,7 @@ export default function SignupScreen() {
         </TouchableOpacity>
 
         <View style={styles.linkContainer}>
-          <TouchableOpacity style={styles.flexItem}>
+          <TouchableOpacity style={styles.flexItem} onPress={handleSignupButton}>
             <Text style={styles.linkText}>회원가입</Text>
           </TouchableOpacity>
 

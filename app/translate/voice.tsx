@@ -116,7 +116,7 @@ const VoiceTranslateScreen = () => {
           }}
         />
         </View>
-        <View>
+        <View style={{ bottom:0, left:0, marginTop: 360}}>
           <TabBar />
         </View>
     </SafeAreaView>
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 16,
-    color: '#fff',
+    color: '#000',
   },
   arrow: {
     fontSize: 18,

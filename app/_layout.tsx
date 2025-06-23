@@ -40,6 +40,7 @@ export default function RootLayout() {
         <Stack.Screen name="board/new" />
         <Stack.Screen name="board/view" />
         <Stack.Screen name="mypage/main" />
+        <Stack.Screen name="translate/TextTranslate" />
         <Stack.Screen name="mypage/police" />
         <Stack.Screen name="translation/voice" />
       </Stack>

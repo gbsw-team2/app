@@ -14,8 +14,7 @@ const BoardScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-      <View style={{flexDirection: 'row'}}>
-        
+      <View style={{flexDirection: 'row'}}> 
         <Text style={styles.title}>행사 리스트</Text>
         <Dropdown
             style={styles.countrySelect}
