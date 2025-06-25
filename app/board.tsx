@@ -1,30 +1,52 @@
 import { SafeAreaView, View, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import EventList from "@/components/ui/community/EventList";
 import WriteList from "@/components/ui/community/WriteList";
 import TabBar from "@/components/ui/TabBar";
-import { Country, DropdownItem, Region } from "@/constants/User";
+import { Country, DropdownItem } from "@/constants/User";
+import { userinfo } from "@/api/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BoardScreen = () => {
-  const [selectedCountry, setSelectedCountry] = useState<string>(''); 
-  const [selectedRegion, setSelectedRegion] = useState<string>('');
+
+  const [selectedCountry, setSelectedCountry] = useState<number>(); 
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const test = await userinfo();
+        setSelectedCountry(Number(test.data.country));
+      } catch(e) {
+        console.log(e);
+      }
+    };
+
+    fetchData();
+  }, []); 
+
+  useEffect(() => {
+    const fetchUserCountry = async () => {
+      try {
+        const userInfo = await AsyncStorage.getItem("User");
+        if (userInfo) {
+          const parsed = JSON.parse(userInfo);
+          setSelectedCountry(parsed.country)
+        }
+      } catch (err) {
+        console.log("국적 불러오기 실패: ", err);
+      }
+    }
+    fetchUserCountry();
+  }, [])
+  
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
       <View style={{flexDirection: 'row'}}> 
         <Text style={styles.title}>행사 리스트</Text>
-        <Dropdown
-            style={styles.countrySelect}
-            data={Region}
-            labelField="label"
-            valueField="value"
-            placeholder="지역선택"
-            value={selectedRegion}
-            onChange={(item: DropdownItem) => setSelectedRegion(String(item.value))}
-          />
       </View>
         <EventList />
         <View style={{flexDirection: 'row', marginBottom: 12}}>
@@ -36,7 +58,8 @@ const BoardScreen = () => {
             valueField="value"
             placeholder="국적선택"
             value={selectedCountry}
-            onChange={(item: DropdownItem) => setSelectedCountry(String(item.value))}
+            onChange={(item: DropdownItem) => {
+              setSelectedCountry(Number(item.value))}}
           />
         </View>
         <View style={styles.boardList}>

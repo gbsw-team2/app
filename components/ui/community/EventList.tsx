@@ -1,58 +1,46 @@
-import React from "react";
-import { View, StyleSheet, Text, Linking, Pressable, ScrollView } from "react-native";
-
-type eventListProps = {
-  id: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-  place: string;
-  link?: string;
-};
-
-const eventList: eventListProps[] = [
-  {
-    id: "event1",
-    title: "제18회 마포나루 새우젓 축제",
-    startDate: "2025-10-17",
-    endDate: "2025-10-19",
-    place: "월드컵공원 평화의 광장",
-    link: "https://www.mapo.go.kr/site/maponarusf/content/mss240101",
-  },
-  {
-    id: "event2",
-    title: "당항포대첩축제",
-    startDate: "2025-05-09",
-    endDate: "2025-05-11",
-    place: "당항포관광지",
-  },
-  {
-    id: "event3",
-    title: "이천도자기축제",
-    startDate: "2025-04-25",
-    endDate: "2025-05-06",
-    place: "이천시 신둔면 예스파크",
-    link: "http://www.ceramic.or.kr"
-  }
-];
+import React, {useEffect, useState} from "react";
+import { View, StyleSheet, Text, Linking, Pressable, ScrollView, ActivityIndicator  } from "react-native";
+import { fetchEventList, EventItem } from "@/api/eventList";
 
 const EventList: React.FC = () => {
+  const [eventList, setEventList] = useState<EventItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const handlePress = (url?: string) => {
     if (url) {
       Linking.openURL(url).catch(err => console.error("링크 열기 실패: ", err));
     }
   };
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        const data = await fetchEventList();
+        setEventList(data);
+      } catch (error) {
+        console.error("행사정보불러오기실패", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadEvents();
+  }, [])
+
+  if (loading) {
+    return <ActivityIndicator size="small" style={{ marginTop: 20 }} />
+  }
+
   return (
     <View style={{padding: 16}}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} >
         <View style={styles.container}>
           {eventList.map((event) => (
-            <View key={event.id} style={styles.eventCard}>
-              <Text style={styles.title}>{event.title}</Text>
-              <Text style={styles.info}>기간: {event.startDate}~{event.endDate}</Text>
-              <Text style={styles.info}>장소: {event.place}</Text>
-              {event.link && (
-                <Pressable onPress={() => handlePress(event.link)}>
+            <View style={styles.eventCard}>
+              <Text style={styles.title}>{event.fstvlNm}</Text>
+              <Text style={styles.info}>기간: {event.fstvlStartDate}~{event.fstvlEndDate}</Text>
+              <Text style={styles.info}>장소: {event.opar}</Text>
+              {event.homepageUrl && (
+                <Pressable onPress={() => handlePress(event.homepageUrl)}>
                   <Text style={styles.linkText}>자세한 정보</Text>
                 </Pressable>
               )}

@@ -6,7 +6,7 @@ import { Country, DropdownItem } from "@/constants/User";
 import { newPost } from "@/api/new";
 import { router } from "expo-router";
 
-const NewWrite = () => {
+const update = () => {
   const [title, setTitle] = useState<string>('');
   const [body, setBody] = useState<string>('');
   const [titleError, setTitleError] = useState<string>('');
@@ -41,7 +41,7 @@ const NewWrite = () => {
         setBody('');
         router.push("/board");
       } else {
-        alert("게시글 등록에 실패하였습니다.");
+        alert("게시글 수정에 실패하였습니다.");
       }
     } catch (error) {
       console.error("Error posting data: ", error);
@@ -73,7 +73,7 @@ const NewWrite = () => {
           value={body}
           onChangeText={setBody}
           multiline
-          style={[styles.input, {height:360, textAlign: 'left', textAlignVertical: 'top'}]}
+          style={[styles.input, {height:360}]}
         />
         {contentError ? (
           <Text style={styles.errorText}>{contentError}</Text>
@@ -94,10 +94,10 @@ const NewWrite = () => {
     </SafeAreaView>
     </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-  );
-};
+  )
+}
 
-export default NewWrite;
+export default update;
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -152,3 +152,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 })
+

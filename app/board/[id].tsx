@@ -1,15 +1,13 @@
 import { View, StyleSheet } from "react-native"
 import BackHeader from "@/components/ui/BackHeader"
-import BoardUser from "@/components/ui/community/BoardUser"
 import LookBoard from "@/components/ui/community/LookBoard"
 import Comments from "@/components/ui/community/Comments"
 
 const ViewScreen = () => {
 
   return (
-    <View>
+    <View style={styles.container}>
       <BackHeader text="게시글"/>
-      {/* <BoardUser /> */}
       <LookBoard />
       <Comments />
     </View>
@@ -17,7 +15,10 @@ const ViewScreen = () => {
 }
 
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
 })
 
 export default ViewScreen

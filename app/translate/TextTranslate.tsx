@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    SafeAreaView,
+    ScrollView,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -11,7 +19,7 @@ export default function TextTranslate() {
     const [inputText, setInputText] = useState("");
     const [translatedText, setTranslatedText] = useState("");
     const [sourceLang, setSourceLang] = useState("ko-KR");
-    const [targetLang, setTargetLang] = useState("");
+    const [targetLang, setTargetLang] = useState("vi-VN");
 
     const handleTranslate = async () => {
         if (!inputText.trim()) return;
@@ -22,8 +30,8 @@ export default function TextTranslate() {
                 beforeLang: sourceLang,
                 afterLang: targetLang,
             });
-
-            setTranslatedText(response.data.result);
+            console.log(response.data);
+            setTranslatedText(response.data);
         } catch (error) {
             console.error("번역 실패:", error);
             setTranslatedText("번역에 실패했습니다.");
@@ -40,11 +48,13 @@ export default function TextTranslate() {
                     <Text style={styles.title}>텍스트번역</Text>
                 </View>
 
+                {/* 원본 언어 선택 및 입력 */}
                 <View style={styles.box}>
                     <Picker
                         selectedValue={sourceLang}
                         style={styles.picker}
                         onValueChange={(itemValue) => setSourceLang(itemValue)}
+                        mode="dropdown"
                     >
                         <Picker.Item label="한국어" value="ko-KR" />
                         <Picker.Item label="영어" value="en-US" />
@@ -66,11 +76,13 @@ export default function TextTranslate() {
                     </View>
                 </View>
 
+                {/* 번역 언어 선택 및 결과 */}
                 <View style={styles.box}>
                     <Picker
                         selectedValue={targetLang}
                         style={styles.picker}
                         onValueChange={(itemValue) => setTargetLang(itemValue)}
+                        mode="dropdown"
                     >
                         <Picker.Item label="베트남어" value="vi-VN" />
                         <Picker.Item label="영어" value="en-US" />
@@ -81,9 +93,8 @@ export default function TextTranslate() {
                     </View>
                 </View>
             </ScrollView>
-            <View>
-                <TabBar />
-            </View>
+
+            <TabBar />
         </SafeAreaView>
     );
 }
@@ -110,60 +121,63 @@ const styles = StyleSheet.create({
     },
     box: {
         backgroundColor: "#fff",
-        borderRadius: 8,
-        padding: 12,
-        marginBottom: 20,
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 25,
         shadowColor: "#000",
-        shadowOpacity: 0.05,
-        shadowRadius: 5,
-        elevation: 1,
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 3,
     },
     picker: {
-        height: 40,
         width: "100%",
         borderWidth: 0,
         marginBottom: 10,
     },
     inputContainer: {
-        borderWidth: 0,
-        borderColor: "#3E7BC9",
-        borderRadius: 6,
-        padding: 10,
-        position: "relative",
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        padding: 12,
+        marginTop: 10,
+        backgroundColor: "#f9f9f9",
     },
     input: {
-        minHeight: 100,
+        minHeight: 120,
         textAlignVertical: "top",
         fontSize: 16,
+        padding: 8,
     },
     counter: {
-        position: "absolute",
-        bottom: 8,
-        left: 10,
-        color: "#999",
+        textAlign: "right",
+        marginTop: 6,
+        color: "#888",
         fontSize: 12,
     },
     button: {
-        position: "absolute",
-        bottom: 5,
-        right: 5,
+        marginTop: 10,
+        alignSelf: "flex-end",
         backgroundColor: "#3E7BC9",
         borderRadius: 6,
-        paddingVertical: 6,
-        paddingHorizontal: 12,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
     },
     buttonText: {
         color: "#fff",
         fontWeight: "bold",
+        fontSize: 14,
     },
     resultContainer: {
-        minHeight: 100,
-        padding: 10,
-        backgroundColor: "#fff",
-        borderRadius: 6,
+        minHeight: 120,
+        backgroundColor: "#f0f4f8",
+        borderRadius: 8,
+        padding: 12,
+        marginTop: 10,
+        justifyContent: "center",
     },
     resultText: {
         fontSize: 16,
-        fontWeight: "bold",
+        color: "#333",
+        lineHeight: 24,
     },
 });

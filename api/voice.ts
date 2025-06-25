@@ -16,5 +16,9 @@ export const sendAudioTranslation = async (
   formData.append('beforeLang', beforeLang);
   formData.append('afterLang', afterLang);
 
-  return await api.post('/api/translate/voice', formData);
+  return await api.post('/api/translate/voice', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 };
