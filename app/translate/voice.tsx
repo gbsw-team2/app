@@ -26,7 +26,6 @@ const VoiceTranslateScreen = () => {
 
   const toggleRecording = async () => {
     if (recording) {
-      // 🔴 녹음 종료
       await recording.stopAndUnloadAsync();
       const uri = recording.getURI();
       setRecording(null);
@@ -51,7 +50,6 @@ const VoiceTranslateScreen = () => {
         }
       }
     } else {
-      // 🟢 녹음 시작
       try {
         const { granted } = await Audio.requestPermissionsAsync();
         if (!granted) {

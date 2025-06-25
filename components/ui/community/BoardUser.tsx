@@ -4,7 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons"
 const BoardUser = () => {
   return (
     <View style={styles.container}>
-      <MaterialIcons name="account-circle" size={32} color="#3E7BC9" />
+      <MaterialIcons name="account-circle" size={32} color="#FFF" />
       <View>
         <Text>Sophia</Text>
         <Text>2025-04-15</Text>

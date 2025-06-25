@@ -38,7 +38,7 @@ export const Country: DropdownItem[] = [
   { label: '베트남', value: 2 },
   { label: '태국', value: 3 },
   { label: '미국', value: 4 },
-  { label: '우주베키스탄', value: 5 },
+  { label: '우즈베키스탄', value: 5 },
   { label: '네팔', value: 6 },
   { label: '인도네시아', value: 7 },
   { label: '러시아', value: 8 },

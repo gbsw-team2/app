@@ -38,7 +38,7 @@ const TabBar = () => {
           <TouchableOpacity onPress={() => { router.push('/translate/voice'); setShowTranslateOptions(false); }}>
             <Text style={styles.option}>음성번역</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { router.push('/'); setShowTranslateOptions(false); }}>
+          <TouchableOpacity onPress={() => { router.push('/translate/ImageTranslate'); setShowTranslateOptions(false); }}>
             <Text style={styles.option}>이미지번역</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => { router.push('/translate/TextTranslate'); setShowTranslateOptions(false); }}>
